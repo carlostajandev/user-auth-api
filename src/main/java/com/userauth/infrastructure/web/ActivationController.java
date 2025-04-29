@@ -43,7 +43,7 @@ public class ActivationController {
         }
     }
 
-    @PostMapping("/activate")
+    @PostMapping("/activate-pass")
     @Operation(summary = "Activate user account with password")
     public ResponseEntity<ActivationResponseDTO> activateAccount(
             @RequestParam String token,
