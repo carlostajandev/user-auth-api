@@ -1,4 +1,4 @@
-package com.userauth.application.dto;
+package com.userauth.application.dto.activation;
 
 import lombok.Data;
 

@@ -1,7 +1,7 @@
 package com.userauth.infrastructure.web;
 
-import com.userauth.application.dto.ActivationRequestDTO;
-import com.userauth.application.dto.ActivationResponseDTO;
+import com.userauth.application.dto.activation.ActivationRequestDTO;
+import com.userauth.application.dto.activation.ActivationResponseDTO;
 import com.userauth.domain.service.ActivationService;
 import com.userauth.exceptions.InvalidTokenException;
 import com.userauth.exceptions.TokenAlreadyUsedException;
@@ -43,7 +43,7 @@ public class ActivationController {
         }
     }
 
-    @PostMapping("/activate")
+    @PostMapping("/activate-pass")
     @Operation(summary = "Activate user account with password")
     public ResponseEntity<ActivationResponseDTO> activateAccount(
             @RequestParam String token,

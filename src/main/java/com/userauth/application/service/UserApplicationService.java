@@ -1,6 +1,6 @@
 package com.userauth.application.service;
 
-import com.userauth.application.dto.RegisterRequestDTO;
+import com.userauth.application.dto.register.RegisterRequestDTO;
 import com.userauth.domain.model.User;
 import com.userauth.domain.ports.EmailServicePort;
 import com.userauth.domain.ports.UserRepositoryPort;
