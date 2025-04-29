@@ -1,7 +1,7 @@
 package com.userauth.infrastructure.web;
 
-import com.userauth.application.dto.ActivationRequestDTO;
-import com.userauth.application.dto.ActivationResponseDTO;
+import com.userauth.application.dto.activation.ActivationRequestDTO;
+import com.userauth.application.dto.activation.ActivationResponseDTO;
 import com.userauth.domain.service.ActivationService;
 import com.userauth.exceptions.InvalidTokenException;
 import com.userauth.exceptions.TokenAlreadyUsedException;

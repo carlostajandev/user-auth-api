@@ -13,13 +13,6 @@ spring:
       hibernate:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
-  springdoc:
-    api-docs:
-      path: /v3/api-docs
-    swagger-ui:
-      path: /swagger-ui.html
-
   mail:
     host: in-v3.mailjet.com
     port: 587
@@ -32,6 +25,18 @@ spring:
           auth: true
           starttls:
             enable: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+
+
+jwt:
+    secret: "TuClaveSecretaMuySeguraYComplejaQueDebeTenerAlMenos32Caracteres123456"
+    expiration: 86400
 app:
   base-url: http://localhost:8080
 
