@@ -1,4 +1,5 @@
 package com.userauth.infrastructure.persistence.adapter;
+
 import com.userauth.domain.model.ActivationToken;
 import com.userauth.domain.ports.ActivationTokenRepositoryPort;
 import com.userauth.infrastructure.persistence.entity.ActivationTokenEntity;
@@ -23,7 +24,7 @@ public class ActivationTokenRepositoryAdapter implements ActivationTokenReposito
 
     @Override
     public ActivationToken findByToken(String token) {
-        // Modificar para mejor manejo de errores
+        // Handle null or blank tokens safely
         if (token == null || token.isBlank()) {
             return null;
         }

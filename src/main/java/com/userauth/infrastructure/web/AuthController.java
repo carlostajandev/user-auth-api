@@ -16,10 +16,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.UUID;
 
 @RestController
@@ -35,7 +33,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterRequestDTO request) {
-        // 1. Verificar si el usuario ya existe
+        // 1. Check if user already exists
         User existingUser = userServicePort.findByEmail(request.getEmail());
         if (existingUser != null) {
             RegisterResponseDTO response = new RegisterResponseDTO();
@@ -44,22 +42,20 @@ public class AuthController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        // 2. Registrar el usuario
+        // 2. Register the user
         User user = userServicePort.registerUser(request.getFullName(), request.getEmail());
 
-        // 3. Generar token de activación
+        // 3. Generate activation token
         String activationToken = UUID.randomUUID().toString();
 
-        // 4. Enviar email de activación
-        emailServicePort.sendActivationEmail(user.getEmail(), activationToken);
-
-        // 5. Preparar respuesta
+        // 5. Prepare response
         RegisterResponseDTO response = new RegisterResponseDTO();
         response.setMessage("Registration successful. Please check your email to activate your account.");
         response.setEmail(user.getEmail());
 
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/login")
     @Operation(summary = "Authenticate user and get JWT token")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {

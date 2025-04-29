@@ -26,24 +26,24 @@ public class PasswordResetService {
     public void requestPasswordReset(String email) {
         User user = userService.findByEmail(email);
         if (user == null || !user.isActive()) {
-            // No revelar que el usuario no existe por seguridad
+            // Do not reveal that the user does not exist for security reasons
             return;
         }
 
-        // Eliminar tokens previos
+        // Delete previous tokens
         tokenRepository.deleteByUserId(user.getId());
 
-        // Crear nuevo token
+        // Create new token
         PasswordResetToken token = new PasswordResetToken();
         token.setToken(UUID.randomUUID().toString());
         token.setUserId(user.getId());
         token.setCreatedAt(LocalDateTime.now());
-        token.setExpiresAt(LocalDateTime.now().plusHours(2)); // Expira en 2 horas
+        token.setExpiresAt(LocalDateTime.now().plusHours(2)); // Expires in 2 hours
         token.setUsed(false);
 
         tokenRepository.save(token);
 
-        // Enviar email
+        // Send email
         emailService.sendPasswordResetEmail(user.getEmail(), token.getToken());
     }
 
@@ -51,15 +51,15 @@ public class PasswordResetService {
         PasswordResetToken resetToken = tokenRepository.findByToken(token);
 
         if (resetToken == null) {
-            throw new InvalidTokenException("Token de recuperación inválido");
+            throw new InvalidTokenException("Invalid recovery token");
         }
 
         if (resetToken.isUsed()) {
-            throw new TokenAlreadyUsedException("Este token ya ha sido utilizado");
+            throw new TokenAlreadyUsedException("This token has already been used");
         }
 
         if (resetToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("El token de recuperación ha expirado");
+            throw new TokenExpiredException("The recovery token has expired");
         }
     }
 

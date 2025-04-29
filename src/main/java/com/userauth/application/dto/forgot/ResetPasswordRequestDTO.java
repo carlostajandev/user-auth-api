@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class ResetPasswordRequestDTO {
-    @NotBlank(message = "Nueva contraseña es requerida")
+    @NotBlank(message = "New password is required")
     private String newPassword;
 }

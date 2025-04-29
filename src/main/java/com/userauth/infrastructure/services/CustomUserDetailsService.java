@@ -1,4 +1,5 @@
 package com.userauth.infrastructure.services;
+
 import com.userauth.domain.model.User;
 import com.userauth.domain.ports.UserServicePort;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.findByEmail(email);
         if (user == null || !user.isActive()) {
-            throw new UsernameNotFoundException("Usuario no encontrado o inactivo");
+            throw new UsernameNotFoundException("User not found or inactive");
         }
 
         return org.springframework.security.core.userdetails.User.builder()
