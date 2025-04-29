@@ -26,9 +26,9 @@ public class ActivationController {
     @GetMapping("/activate")
     public ResponseEntity<ActivationResponseDTO> validateToken(@RequestParam String token) {
         try {
-            // Decodificar token por si tiene caracteres especiales
+            // Decode token in case it contains special characters
             String decodedToken = URLDecoder.decode(token, StandardCharsets.UTF_8.name());
-            System.out.println("Token recibido: " + decodedToken); // Log de depuración
+            System.out.println("Received token: " + decodedToken); // Debug log
 
             try {
                 activationService.validateToken(decodedToken);
@@ -37,9 +37,10 @@ public class ActivationController {
             } catch (TokenExpiredException e) {
                 throw new RuntimeException(e);
             }
-            return ResponseEntity.ok(new ActivationResponseDTO("Token válido. Por favor establece tu contraseña."));
+
+            return ResponseEntity.ok(new ActivationResponseDTO("Valid token. Please set your password."));
         } catch (Exception e) {
-            throw new InvalidTokenException("Error procesando el token: " + e.getMessage());
+            throw new InvalidTokenException("Error processing token: " + e.getMessage());
         }
     }
 
@@ -56,6 +57,7 @@ public class ActivationController {
         } catch (TokenAlreadyUsedException e) {
             throw new RuntimeException(e);
         }
-        return ResponseEntity.ok(new ActivationResponseDTO("Cuenta activada exitosamente. Ya puedes iniciar sesión."));
+
+        return ResponseEntity.ok(new ActivationResponseDTO("Account successfully activated. You can now log in."));
     }
 }

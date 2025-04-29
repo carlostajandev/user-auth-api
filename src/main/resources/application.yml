@@ -16,23 +16,32 @@ spring:
   mail:
     host: in-v3.mailjet.com
     port: 587
-    username: 3199ac38f5e85c9a991f34d243886c9d
-    password: 80e8a276c0c185e53dd9561bf09343dd
+    username: 
+    password:
     properties:
       mail:
-        from: ctruiz0515@gmail.com
+        from:
         smtp:
           auth: true
           starttls:
             enable: true
 
 springdoc:
-  api-docs:
-    path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
-
-
+    enabled: true
+    operationsSorter: alpha
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  paths-to-match: /api/**
+  cache:
+    disabled: true
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
 
 jwt:
     secret: "TuClaveSecretaMuySeguraYComplejaQueDebeTenerAlMenos32Caracteres123456"

@@ -1,6 +1,5 @@
 package com.userauth.infrastructure.web;
 
-
 import com.userauth.application.dto.forgot.ForgotPasswordRequestDTO;
 import com.userauth.application.dto.forgot.GenericResponseDTO;
 import com.userauth.application.dto.forgot.ResetPasswordRequestDTO;
@@ -28,7 +27,7 @@ public class PasswordResetController {
     public ResponseEntity<GenericResponseDTO> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
         passwordResetService.requestPasswordReset(request.getEmail());
         return ResponseEntity.ok(
-                new GenericResponseDTO("Si el email existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña")
+                new GenericResponseDTO("If the email exists in our system, you will receive a link to reset your password.")
         );
     }
 
@@ -37,16 +36,16 @@ public class PasswordResetController {
     public ResponseEntity<GenericResponseDTO> validateResetToken(@RequestParam String token) {
         try {
             passwordResetService.validateToken(token);
-            return ResponseEntity.ok(new GenericResponseDTO("Token válido"));
+            return ResponseEntity.ok(new GenericResponseDTO("Valid token"));
         } catch (InvalidTokenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("Token inválido"));
+                    .body(new GenericResponseDTO("Invalid token"));
         } catch (TokenAlreadyUsedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("Este token ya ha sido utilizado"));
+                    .body(new GenericResponseDTO("This token has already been used"));
         } catch (TokenExpiredException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("El token ha expirado"));
+                    .body(new GenericResponseDTO("The token has expired"));
         }
     }
 
@@ -58,17 +57,17 @@ public class PasswordResetController {
         try {
             passwordResetService.resetPassword(token, request.getNewPassword());
             return ResponseEntity.ok(
-                    new GenericResponseDTO("Contraseña actualizada exitosamente")
+                    new GenericResponseDTO("Password successfully updated")
             );
         } catch (InvalidTokenException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("Token inválido"));
+                    .body(new GenericResponseDTO("Invalid token"));
         } catch (TokenAlreadyUsedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("Este token ya ha sido utilizado"));
+                    .body(new GenericResponseDTO("This token has already been used"));
         } catch (TokenExpiredException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new GenericResponseDTO("El token ha expirado"));
+                    .body(new GenericResponseDTO("The token has expired"));
         }
     }
 }

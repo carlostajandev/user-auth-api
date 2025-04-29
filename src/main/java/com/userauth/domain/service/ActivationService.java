@@ -10,6 +10,7 @@ import com.userauth.exceptions.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -21,56 +22,57 @@ public class ActivationService {
     private final PasswordEncoder passwordEncoder;
 
     public void validateToken(String token) throws TokenAlreadyUsedException, TokenExpiredException {
-        // Validación básica del token
+        // Basic token validation
         if (token == null || token.isBlank()) {
-            throw new InvalidTokenException("Token no puede estar vacío");
+            throw new InvalidTokenException("Token cannot be empty");
         }
 
-        // Buscar token en la base de datos
+        // Search for token in the database
         ActivationToken activationToken = tokenRepository.findByToken(token.trim());
-        System.out.println("Token buscado: " + token); // Log para depuración
+        System.out.println("Token searched: " + token); // Debug log
 
         if (activationToken == null) {
-            throw new InvalidTokenException("Token no encontrado en la base de datos");
+            throw new InvalidTokenException("Token not found in the database");
         }
 
         if (activationToken.isUsed()) {
-            throw new TokenAlreadyUsedException("Este token ya fue utilizado");
+            throw new TokenAlreadyUsedException("This token has already been used");
         }
 
         if (activationToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-            throw new TokenExpiredException("Token expirado");
+            throw new TokenExpiredException("Token has expired");
         }
 
-        // Verificar que el usuario existe
+        // Verify user exists
         User user = userService.findById(activationToken.getUserId());
         if (user == null) {
-            throw new InvalidTokenException("Usuario asociado al token no existe");
+            throw new InvalidTokenException("User associated with the token does not exist");
         }
     }
+
     public void activateUser(String token, String password) throws TokenExpiredException, TokenAlreadyUsedException {
-        // 1. Validar el token primero
+        // 1. Validate token first
         validateToken(token);
 
-        // 2. Obtener el token completo
+        // 2. Get the full token
         ActivationToken activationToken = tokenRepository.findByToken(token);
         if (activationToken == null) {
-            throw new InvalidTokenException("Token no encontrado");
+            throw new InvalidTokenException("Token not found");
         }
 
-        // 3. Obtener el usuario con mejor manejo de errores
+        // 3. Get user with better error handling
         try {
             User user = userService.findById(activationToken.getUserId());
 
-            // 4. Actualizar usuario
+            // 4. Update user
             user.setPassword(passwordEncoder.encode(password));
             user.setActive(true);
             userService.save(user);
 
-            // 5. Marcar token como usado
+            // 5. Mark token as used
             tokenRepository.markAsUsed(token);
         } catch (RuntimeException e) {
-            throw new InvalidTokenException("Error activando usuario: " + e.getMessage());
+            throw new InvalidTokenException("Error activating user: " + e.getMessage());
         }
     }
 }
