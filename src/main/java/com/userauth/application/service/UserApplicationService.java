@@ -36,8 +36,7 @@ public class UserApplicationService {
         // Guardar usuario
         userRepository.save(user);
         // Enviar email
-        String activationLink = "http://localhost:8080/api/auth/activate/" + user.getActivationToken();
-        mailSender.sendActivationEmail(user.getEmail(), activationLink);
+        mailSender.sendActivationEmail(user.getEmail(), user.getActivationToken());
     }
 }
 
